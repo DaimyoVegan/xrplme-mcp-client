@@ -1,0 +1,17 @@
+{
+  "_comment_1": "Example MCP client config for Claude Desktop / Cursor.",
+  "_comment_2": "The xrplme endpoint is GATED pre-launch and returns 404 until enabled.",
+  "_comment_3": "Set XRPLME_MCP_TOKEN in your environment first. Never commit the token.",
+  "mcpServers": {
+    "xrplme-country-data": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://api.xrplme.online/mcp",
+        "--header",
+        "Authorization: Bearer ${XRPLME_MCP_TOKEN}"
+      ]
+    }
+  }
+}
