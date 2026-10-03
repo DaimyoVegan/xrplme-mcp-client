@@ -8,7 +8,6 @@ proof of payment. No accounts, no subscription.
 
     402  ->  pay XRP  ->  retry with X-PAYMENT-SIGNATURE + X-INV-ID  ->  200
 
-    export XRPLME_MCP_TOKEN="your-discovery-token"     # free tier, for discovery
     export XRPLME_WALLET_SEED="s...."                  # YOUR wallet. Never commit.
     python x402_payment.py
 
@@ -22,12 +21,10 @@ low-balance hot wallet, and keep the seed in a 0600 env file or a signer service
 never in shell history or source control.
 """
 import os
-import sys
 import json
 import requests
 
 MCP_URL = os.environ.get("XRPLME_MCP_URL", "https://api.xrplme.online/mcp")
-TOKEN = os.environ.get("XRPLME_MCP_TOKEN", "")
 SLUG = os.environ.get("XRPLME_SLUG", "thailand")
 
 
@@ -35,10 +32,9 @@ def discover_price() -> dict:
     """Pricing is free to look up — no payment, no upstream call."""
     r = requests.post(
         MCP_URL,
-        headers={"Authorization": f"Bearer {TOKEN}",
-                 "Content-Type": "application/json"},
+        headers={"Content-Type": "application/json"},
         json={"jsonrpc": "2.0", "id": 1, "method": "tools/call",
-              "params": {"name": "xrplme_get_country_pricing",
+              "params": {"name": "xrplme_get_pricing",
                          "arguments": {"slug": SLUG}}},
         timeout=30,
     )
@@ -48,8 +44,7 @@ def discover_price() -> dict:
 
 def call_premium_route(payment_signature: str | None = None,
                        invoice_id: str | None = None) -> requests.Response:
-    headers = {"Authorization": f"Bearer {TOKEN}",
-               "Content-Type": "application/json"}
+    headers = {"Content-Type": "application/json"}
     if payment_signature:
         headers["X-PAYMENT-SIGNATURE"] = payment_signature
     if invoice_id:
@@ -88,9 +83,6 @@ def sign_payment(seed: str, destination: str, drops: int, invoice_id: str) -> st
 
 
 def main() -> None:
-    if not TOKEN:
-        sys.exit("Set XRPLME_MCP_TOKEN first.")
-
     print(f"1. discovering price for {SLUG} ...")
     print("   ", json.dumps(discover_price())[:300])
 
@@ -98,7 +90,7 @@ def main() -> None:
     resp = call_premium_route()
     print("    HTTP", resp.status_code)
     if resp.status_code != 402:
-        print("    (not gated here — discovery tier or already paid)")
+        print("    (no payment required — free tier or already paid)")
         print("   ", resp.text[:300])
         return
 

@@ -1,0 +1,14 @@
+# Website content and VPS deploy artifacts — NOT part of the MCP client library.
+# The public repo is client examples only (LICENSE, README.md, examples/).
+blog/
+developers.html
+index.local.html
+robots.txt
+sitemap.xml
+deploy-*.sh
+*.bak
+*.bak.*
+.env
+.env.*
+__pycache__/
+*.pyc

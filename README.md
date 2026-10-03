@@ -1,8 +1,9 @@
 # xrplme-mcp-client
 
-> **Status: pre-release.** This repository documents an MCP server that is built
-> and deployed but **not yet publicly enabled**. The endpoint below is gated and
-> will return `404` until launch. Star/watch the repo to be notified.
+> **Status: LIVE.** The MCP server is publicly available at
+> `https://api.xrplme.online/mcp` — anonymous, no token required for the free
+> discovery tier. Premium country routes settle per query via **x402** on the
+> XRP Ledger.
 
 Example clients and integration guides for the **XRPLME Country Data** MCP server —
 30-country economic and policy data for AI agents, with a free discovery tier and
@@ -24,50 +25,34 @@ first-class tool. Payments for premium routes use **x402** — HTTP-native,
 pay-per-query, settled on the XRP Ledger. No accounts, no API-key sales.
 
 - **Transport:** streamable HTTP
-- **Endpoint:** `https://api.xrplme.online/mcp` *(gated — 404 until launch)*
+- **Endpoint:** `https://api.xrplme.online/mcp` *(live, anonymous)*
 - **Coverage:** 30 countries
-- **Auth:** opaque Bearer token, `read:countries` scope (free discovery tier)
+- **Auth:** none for the free discovery tier
 - **Premium:** x402, 0.1–0.5 XRP per query
 
 ---
 
 ## Quickstart
 
-### 1. Get a token
+### 1. Point a client at the server
 
-The discovery tier is free. During pre-release, request access at
-`https://xrplme.online/developers` (page ships at launch). You will receive an
-opaque bearer token scoped to `read:countries`. It is not a wallet key and grants
-no ability to move funds.
-
-Export it:
-
-```bash
-export XRPLME_MCP_TOKEN="your-token-here"
-```
-
-**Never commit your token.** Use environment variables or your client's secret store.
-
-### 2. Point a client at the server
-
-See [`examples/`](./examples). The fastest path is `mcp-remote`, which lets any
-stdio-only MCP client talk to a remote HTTP server:
+No token needed. The fastest path is `mcp-remote`, which lets any stdio-only MCP
+client talk to a remote HTTP server:
 
 ```json
 {
   "mcpServers": {
     "xrplme-country-data": {
       "command": "npx",
-      "args": [
-        "-y", "mcp-remote", "https://api.xrplme.online/mcp",
-        "--header", "Authorization: Bearer ${XRPLME_MCP_TOKEN}"
-      ]
+      "args": ["-y", "mcp-remote", "https://api.xrplme.online/mcp"]
     }
   }
 }
 ```
 
-### 3. Ask a question
+See [`examples/`](./examples) for Claude Desktop / Cursor, Python and Node clients.
+
+### 2. Ask a question
 
 > "Using the xrplme tools, compare inflation and unemployment for Thailand,
 > Vietnam and Indonesia over the last available year."
@@ -85,19 +70,19 @@ timestamped figures.
 |---|---|
 | `xrplme://countries` | The 30 supported country slugs |
 | `xrplme://status` | Coverage status + data freshness per country |
-| `xrplme://country/{slug}/latest` | Latest validated record set for a country |
-| `xrplme://country/{slug}/pricing` | Current pricing for that country's routes |
-| `xrplme://country/{slug}/schema` | Record schema for that country |
 
-**Tools** (5, all read-only):
+**Tools** (8, all read-only except the optional survey submit):
 
 | Tool | Purpose |
 |---|---|
 | `xrplme_list_countries` | Enumerate the 30 slugs, with freshness state |
+| `xrplme_get_country_status` | Per-country freshness + availability status |
+| `xrplme_get_pricing` | Pricing lookup (no upstream call) |
 | `xrplme_get_country_data` | Fetch a country's latest validated records |
-| `xrplme_get_country_pricing` | Free pricing lookup (no upstream call) |
-| `xrplme_search_records` | Filter records by topic/keyword |
-| `xrplme_get_status` | Server + per-country freshness status |
+| `xrplme_get_country_schema` | Record schema for a country |
+| `xrplme_get_survey_questions` | Retrieve the data-quality survey questions |
+| `xrplme_submit_survey` | Submit survey responses |
+| `xrplme_get_survey_stats` | Aggregate survey statistics |
 
 Every response carries freshness metadata: `age_hours`, `state`
 (`fresh` / `overdue` / `stale_beyond_max`), and `scraped_at`. Data is refreshed
@@ -111,16 +96,16 @@ Some routes return `402 Payment Required` with x402 headers. Your client pays in
 XRP and retries with proof-of-payment — no signup.
 
 ```
-GET /mcp → 402  (X402-Payment-Required, X402-Price, X402-Asset, X402-Payment-Address)
-        ↓ pay 0.1 XRP on XRPL
-GET /mcp + X-PAYMENT-SIGNATURE + X-INV-ID → 200 OK
+POST /mcp → 402  (X402-Payment-Required, X402-Price, X402-Asset, X402-Payment-Address)
+         ↓ pay 0.1 XRP on XRPL
+POST /mcp + X-PAYMENT-SIGNATURE + X-INV-ID → 200 OK
 ```
 
 Full walkthrough: [`examples/x402_payment.py`](./examples/x402_payment.py).
 
 > The discovery tier is free and needs no payment. You only touch x402 for
 > premium country routes. Pricing is discoverable without paying via
-> `xrplme_get_country_pricing`.
+> `xrplme_get_pricing`.
 
 ---
 
@@ -163,5 +148,5 @@ attribution requirements; consult the `source_url` on each record.
 ## Links
 
 - Website: https://xrplme.online
-- Developers: https://xrplme.online/developers *(ships at launch)*
+- Developers: https://xrplme.online/developers
 - Issues: use this repository's issue tracker

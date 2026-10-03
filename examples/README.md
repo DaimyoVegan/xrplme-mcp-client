@@ -1,16 +1,17 @@
 # Examples
 
 All examples target `https://api.xrplme.online/mcp`, overridable with
-`XRPLME_MCP_URL`. **Pre-launch the endpoint is gated and returns 404.**
+`XRPLME_MCP_URL`. The endpoint is public and anonymous — no token required.
 
 ## Setup
 
-```bash
-export XRPLME_MCP_TOKEN="your-discovery-token"   # free tier
-```
+Nothing to configure for the free discovery tier. The payment example
+additionally needs `XRPLME_WALLET_SEED` — a dedicated low-balance wallet, kept
+in a 0600 env file.
 
-Never commit the token. For the payment example you also need
-`XRPLME_WALLET_SEED` — a dedicated low-balance wallet, kept in a 0600 env file.
+```bash
+export XRPLME_WALLET_SEED="s...."   # payment example only. Never commit.
+```
 
 ## Files
 
@@ -32,7 +33,7 @@ python x402_payment.py
 ## What each example shows
 
 - **claude_desktop_config.json** — wiring a remote HTTP MCP server into a
-  stdio-only client via `mcp-remote`, with the bearer header.
+  stdio-only client via `mcp-remote`. No auth header required.
 - **python_client.py** — connecting with the official Python SDK, then
   `list_tools` / `list_resources` / `call_tool` against real endpoints.
 - **node_client.js** — the same flow with the TypeScript SDK.
@@ -41,9 +42,9 @@ python x402_payment.py
 
 ## Notes
 
-- Discovery tools (`xrplme_list_countries`, `xrplme_get_status`,
-  `xrplme_get_country_pricing`, `xrplme_search_records`) are **free** and need no
-  payment.
+- Discovery tools (`xrplme_list_countries`, `xrplme_get_country_status`,
+  `xrplme_get_pricing`, `xrplme_get_country_data`, `xrplme_get_country_schema`)
+  are **free** and need no payment.
 - Every data response includes `age_hours`, `state` and `scraped_at` so you can
   decide for yourself whether the data is fresh enough.
 - Do not print or log wallet seeds. The payment example reads the seed from the
