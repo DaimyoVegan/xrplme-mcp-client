@@ -1,3 +1,6 @@
+[![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/daimyovegan/xrplme-mcp-client)
+
+
 # xrplme-mcp-client
 
 > **Status: LIVE.** The MCP server is publicly available at
