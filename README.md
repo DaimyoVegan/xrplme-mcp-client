@@ -1,6 +1,3 @@
-[![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/daimyovegan/xrplme-mcp-client)
-
-
 # xrplme-mcp-client
 
 > **Status: LIVE.** The MCP server is publicly available at
@@ -31,7 +28,7 @@ pay-per-query, settled on the XRP Ledger. No accounts, no API-key sales.
 - **Endpoint:** `https://api.xrplme.online/mcp` *(live, anonymous)*
 - **Coverage:** 30 countries
 - **Auth:** none for the free discovery tier
-- **Premium:** x402, 0.1–0.5 XRP per query
+- **Premium:** x402, 0.1–0.5 XRP per query (USDC also supported on Solana)
 
 ---
 
@@ -95,8 +92,10 @@ daily; `state` tells you whether you are looking at something recent.
 
 ## Paying with x402 (premium routes)
 
-Some routes return `402 Payment Required` with x402 headers. Your client pays in
-XRP and retries with proof-of-payment — no signup.
+Some routes return `402 Payment Required` with x402 headers. Your client pays and
+retries with proof-of-payment — no signup. Two settlement rails are supported:
+
+### XRP Ledger
 
 ```
 POST /mcp → 402  (X402-Payment-Required, X402-Price, X402-Asset, X402-Payment-Address)
@@ -105,6 +104,22 @@ POST /mcp + X-PAYMENT-SIGNATURE + X-INV-ID → 200 OK
 ```
 
 Full walkthrough: [`examples/x402_payment.py`](./examples/x402_payment.py).
+
+### Solana USDC
+
+```
+POST /mcp → 402  (X402-Payment-Required + accepts with feePayer in extra)
+         ↓ build + partial_sign Solana tx (ComputeBudget + TransferChecked USDC)
+POST /mcp + X-PAYMENT-SIGNATURE (base64 V2 payload) → 200 OK
+```
+
+The 402 response includes a `feePayer` in the `accepts[0].extra` field — this
+wallet pays Solana transaction fees. Your client builds a 3-instruction
+transaction, partially signs it with your USDC wallet, and sends the base64
+transaction in a V2 payment payload via the `X-PAYMENT-SIGNATURE` header. The
+facilitator adds its fee payer signature and verifies on-chain.
+
+Full walkthrough: [`examples/x402_payment_solana.py`](./examples/x402_payment_solana.py).
 
 > The discovery tier is free and needs no payment. You only touch x402 for
 > premium country routes. Pricing is discoverable without paying via
@@ -119,7 +134,8 @@ Full walkthrough: [`examples/x402_payment.py`](./examples/x402_payment.py).
 | [`examples/claude_desktop_config.json`](./examples/claude_desktop_config.json) | Claude Desktop / Cursor configuration |
 | [`examples/python_client.py`](./examples/python_client.py) | Python client via the MCP SDK |
 | [`examples/node_client.js`](./examples/node_client.js) | Node.js client |
-| [`examples/x402_payment.py`](./examples/x402_payment.py) | 402 → pay → retry flow |
+| [`examples/x402_payment.py`](./examples/x402_payment.py) | 402 → pay XRP → retry flow |
+| [`examples/x402_payment_solana.py`](./examples/x402_payment_solana.py) | 402 → pay USDC on Solana → retry flow |
 
 See [`examples/README.md`](./examples/README.md) for per-example setup.
 
