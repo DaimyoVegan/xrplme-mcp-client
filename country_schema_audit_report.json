@@ -1,0 +1,307 @@
+{
+  "audit_date": "2026-10-24",
+  "total_countries": 30,
+  "all_ok": true,
+  "results": {
+    "au": {
+      "module": "au_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "brazil": {
+      "module": "brazil_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "brunei": {
+      "module": "brunei_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "canada": {
+      "module": "canada_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "ch": {
+      "module": "ch_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "de": {
+      "module": "de_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "fr": {
+      "module": "fr_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "hongkong": {
+      "module": "hongkong_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "id": {
+      "module": "indonesia_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "india": {
+      "module": "india_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "italy": {
+      "module": "italy_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "japan": {
+      "module": "japan_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "korea": {
+      "module": "korea_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "laos": {
+      "module": "laos_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "malaysia": {
+      "module": "malaysia_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "macau": {
+      "module": "macau_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "mexico": {
+      "module": "mexico_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "myanmar": {
+      "module": "myanmar_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "netherlands": {
+      "module": "netherlands_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "newzealand": {
+      "module": "newzealand_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "papua_new_guinea": {
+      "module": "papua_new_guinea_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "ph": {
+      "module": "ph_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "sg": {
+      "module": "sg_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "taiwan": {
+      "module": "taiwan_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "thailand": {
+      "module": "thailand_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "timor_leste": {
+      "module": "timor_leste_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "uae": {
+      "module": "uae_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "uk": {
+      "module": "uk_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "usa": {
+      "module": "usa_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    },
+    "vietnam": {
+      "module": "vietnam_bot_server",
+      "import_ok": true,
+      "has_to_v1_schema": true,
+      "has_V1ChatResponse": true,
+      "resource_url_fixed": true,
+      "xrpl_pricing": "1 XRP (correct)",
+      "ai_pricing": "5 XRP (correct)",
+      "issues": []
+    }
+  }
+}
