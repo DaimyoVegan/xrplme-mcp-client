@@ -170,6 +170,32 @@ candidate dataset is only promoted if it meets a per-country quality threshold).
 
 ---
 
+## Keeping this repo in sync with the platform
+
+The README describes a live, changing service, so it drifts. This repo ships the gate
+that catches it:
+
+```bash
+python3 scripts/verify_docs_sync.py          # 0 = in sync, 1 = drift, 2 = unreachable
+```
+
+It reads the live surface (country count, tool list, both pricing tiers, the
+`payment_required` challenge) and fails with one line per stale claim. It also fails
+when the fix is committed but not pushed, so an update only counts once it is public.
+
+Install the pre-push hook once per clone:
+
+```bash
+cp scripts/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+```
+
+After that a push carrying stale docs is blocked with the exact claims to fix.
+An unreachable platform (offline, Cloudflare) exits `2` and **allows** the push —
+being offline is not evidence that the docs are wrong. Bypass for a single push with
+`git push --no-verify`.
+
+---
+
 ## License
 
 MIT — see [LICENSE](./LICENSE).

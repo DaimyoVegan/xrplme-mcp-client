@@ -8,8 +8,16 @@ feature-deploy checklist:
 
     python3 scripts/verify_docs_sync.py
 
-Exit 0 = docs match live. Exit 1 = drift, with one line per mismatch telling you
-exactly which README claim is wrong and what the live value is.
+Exit codes:
+  0 = docs match the live surface
+  1 = drift — one line per mismatched claim
+  2 = could not reach the live surface (network/Cloudflare) — NOT drift
+
+Callers should treat 2 as fail-open: an unreachable network is not evidence that the
+docs are wrong, so it must never block a commit or push.
+
+    --skip-git   skip the git assertions (used by .git/hooks/pre-push, where
+                 "unpushed commits" is always true by definition)
 
 Read-only and unpaid: it only calls the free discovery surface (tools/list,
 xrplme_list_countries, xrplme_get_pricing) plus one unpaid premium call to
@@ -119,7 +127,7 @@ def live_facts() -> dict:
     }
 
 
-def check(readme: str, live: dict) -> None:
+def check(readme: str, live: dict, skip_git: bool = False) -> None:
     n = live["country_count"]
 
     # --- coverage -----------------------------------------------------------
@@ -194,6 +202,9 @@ def check(readme: str, live: dict) -> None:
                 "README does not quote the drop count (fine, tiers are quoted in XRP)")
 
     # --- git: is the synced content actually pushed? ------------------------
+    # Skipped by the pre-push hook: there, HEAD is always ahead of origin.
+    if skip_git:
+        return
     try:
         dirty = subprocess.run(["git", "-C", REPO_ROOT, "status", "--porcelain"],
                                capture_output=True, text=True, timeout=20).stdout.strip()
@@ -209,6 +220,8 @@ def check(readme: str, live: dict) -> None:
 
 
 def main() -> int:
+    skip_git = "--skip-git" in sys.argv[1:]
+
     if not os.path.exists(README):
         print(f"FAIL  README not found at {README}", file=sys.stderr)
         return 1
@@ -217,10 +230,12 @@ def main() -> int:
     try:
         live = live_facts()
     except Exception as exc:  # noqa: BLE001 - report, never traceback
-        print(f"FAIL  could not read live surface: {exc}", file=sys.stderr)
-        return 1
+        # Exit 2, not 1: unreachable is not drift. Callers fail open on this.
+        print(f"UNREACHABLE  could not read live surface: {exc}", file=sys.stderr)
+        print("Not treating as drift — docs were not checked.", file=sys.stderr)
+        return 2
 
-    check(readme, live)
+    check(readme, live, skip_git=skip_git)
 
     print(f"live: {live['country_count']} countries, {len(live['tools'])} tools, "
           f"standard {live['standard_xrp']} XRP / AI {live['ai_xrp']} XRP")

@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# pre-push hook: block a push when README has drifted from the live surface.
+#
+# Install (once per clone):
+#   cp scripts/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+#
+# Behaviour:
+#   0  in sync            -> push proceeds
+#   1  drift              -> push BLOCKED, with the exact mismatched claims
+#   2  live unreachable   -> push proceeds (fail-open: offline is not drift)
+#
+# Bypass for one push: git push --no-verify
+set -uo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
+GATE="$REPO_ROOT/scripts/verify_docs_sync.py"
+[ -f "$GATE" ] || exit 0
+
+PY="$(command -v python3 || command -v python)" || {
+  echo "[docs-sync] no python found — skipping gate"; exit 0
+}
+
+echo "[docs-sync] checking README against the live xrplme.online surface..."
+"$PY" "$GATE" --skip-git
+rc=$?
+
+case "$rc" in
+  0)
+    echo "[docs-sync] in sync."
+    exit 0
+    ;;
+  2)
+    echo "[docs-sync] live surface unreachable — allowing push (this is NOT drift)."
+    exit 0
+    ;;
+  *)
+    echo
+    echo "[docs-sync] PUSH BLOCKED: README no longer describes the live platform."
+    echo "[docs-sync] Fix the claims above, commit, then push again."
+    echo "[docs-sync] One-off bypass: git push --no-verify"
+    exit 1
+    ;;
+esac
