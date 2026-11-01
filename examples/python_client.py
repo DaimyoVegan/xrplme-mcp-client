@@ -44,13 +44,15 @@ async def main() -> None:
             status = await session.call_tool("xrplme_get_country_status", {})
             print("status:", status.content[0].text[:400], "\n")
 
-            # --- 3. Fetch one country's data ---------------------------------
+            # --- 3. One country's data (PAID route) --------------------------
+            # Without payment this returns a `payment_required` result carrying
+            # the price. See x402_payment.py / demo_xrplme_paid.py to settle it.
             data = await session.call_tool(
                 "xrplme_get_country_data",
                 {"slug": "thailand"},
             )
             text = data.content[0].text
-            print("thailand (truncated):", text[:600])
+            print("thailand (unpaid → payment_required):", text[:600])
 
             # --- 4. Free pricing lookup (no payment, no upstream call) -------
             pricing = await session.call_tool(

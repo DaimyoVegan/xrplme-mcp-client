@@ -53,12 +53,12 @@ from x402.mechanisms.svm.constants import COMPUTE_BUDGET_PROGRAM_ADDRESS
 # Configuration
 # ----------------------------------------------------------------------------
 
-# MCP server endpoint (JSON-RPC over HTTP)
+# MCP server endpoint (JSON-RPC over HTTP) — free discovery surface
 MCP_URL = os.environ.get("XRPLME_MCP_URL", "https://api.xrplme.online/mcp")
 
-# Or use the direct country bot API (REST, not JSON-RPC)
-# SLUG = "thailand"
-# COUNTRY_BOT_URL = f"https://xrplme.online/wc/v1/{SLUG}/bot-solana"
+# Direct country bot API (REST) — this is the paid surface that returns HTTP 402
+SLUG = os.environ.get("XRPLME_SLUG", "thailand")
+COUNTRY_BOT_URL = f"https://xrplme.online/wc/v1/{SLUG}/bot-solana"
 
 # Solana RPC
 SOLANA_RPC = "https://api.mainnet-beta.solana.com"
@@ -210,22 +210,15 @@ def main():
         sys.exit(1)
     test_kp = Keypair.from_bytes(bytes(json.loads(secret_json)))
 
-    # --- Option A: MCP server (JSON-RPC) ---
-    mcp_payload = {
-        "jsonrpc": "2.0",
-        "id": 1,
-        "method": "tools/call",
-        "params": {
-            "name": "xrplme_get_country_data",
-            "arguments": {"slug": "thailand", "tier": "premium"},
-        },
-    }
-    url = MCP_URL
-    payload = mcp_payload
-
-    # --- Option B: Direct country bot API (REST) ---
-    # url = "https://xrplme.online/wc/v1/thailand/bot-solana"
-    # payload = {"message": "Thailand economic summary"}
+    # The REST country-bot route is the one that answers with a real HTTP 402
+    # carrying an `accepts[]` challenge. The MCP endpoint (/mcp) instead reports
+    # payment_required in-band inside a 200 JSON-RPC result, which is not what
+    # step1_get_402 parses.
+    url = os.environ.get(
+        "XRPLME_PAID_URL",
+        "https://xrplme.online/wc/v1/thailand/bot-solana",
+    )
+    payload = {"message": "Thailand economic summary", "session_id": "sol-demo-1"}
 
     # Step 1: Get 402
     data_402, accept = step1_get_402(url, payload)

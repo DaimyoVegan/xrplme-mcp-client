@@ -3,7 +3,8 @@
 xrplme.online paid data demo
 ============================
 
-Pays real 1 XRP (or $1 USDC) on-chain, gets back structured v1.1 JSON
+Pays real 1 XRP ($1.00 USDC) on-chain — 5 XRP / $7.00 with --ai — gets back
+structured v1.1 JSON
 with sources, facts, synthesis, and the transaction ID as proof.
 
 Usage:

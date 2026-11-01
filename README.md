@@ -6,7 +6,7 @@
 > XRP Ledger.
 
 Example clients and integration guides for the **XRPLME Country Data** MCP server —
-30-country economic and policy data for AI agents, with a free discovery tier and
+90-country economic and policy data for AI agents, with a free discovery tier and
 x402 pay-per-query premium routes.
 
 ---
@@ -26,9 +26,9 @@ pay-per-query, settled on the XRP Ledger. No accounts, no API-key sales.
 
 - **Transport:** streamable HTTP
 - **Endpoint:** `https://api.xrplme.online/mcp` *(live, anonymous)*
-- **Coverage:** 30 countries
+- **Coverage:** 90 countries
 - **Auth:** none for the free discovery tier
-- **Premium:** x402, 0.1–0.5 XRP per query (USDC also supported on Solana)
+- **Premium:** x402 — 1 XRP standard / 5 XRP AI-enhanced (1 / 7 USDC on Solana)
 
 ---
 
@@ -68,25 +68,27 @@ timestamped figures.
 
 | URI | Returns |
 |---|---|
-| `xrplme://countries` | The 30 supported country slugs |
+| `xrplme://countries` | The 90 supported country slugs |
 | `xrplme://status` | Coverage status + data freshness per country |
 
-**Tools** (8, all read-only except the optional survey submit):
+**Tools** (9, all read-only except the optional survey submit):
 
 | Tool | Purpose |
 |---|---|
-| `xrplme_list_countries` | Enumerate the 30 slugs, with freshness state |
+| `xrplme_list_countries` | Enumerate the 90 slugs, with freshness state |
 | `xrplme_get_country_status` | Per-country freshness + availability status |
 | `xrplme_get_pricing` | Pricing lookup (no upstream call) |
 | `xrplme_get_country_data` | Fetch a country's latest validated records |
 | `xrplme_get_country_schema` | Record schema for a country |
+| `xrplme_regional_research` | Multi-country research over a 30-country subset *(staging prototype, feature-flagged)* |
 | `xrplme_get_survey_questions` | Retrieve the data-quality survey questions |
 | `xrplme_submit_survey` | Submit survey responses |
 | `xrplme_get_survey_stats` | Aggregate survey statistics |
 
 Every response carries freshness metadata: `age_hours`, `state`
-(`fresh` / `overdue` / `stale_beyond_max`), and `scraped_at`. Data is refreshed
-daily; `state` tells you whether you are looking at something recent.
+(`fresh` / `overdue` / `stale_beyond_max`), and `scraped_at`. Datasets are
+refreshed on a regular schedule; `state` and `scraped_at` tell you exactly how
+recent the figures you are looking at are.
 
 ---
 
@@ -97,13 +99,25 @@ retries with proof-of-payment — no signup. Two settlement rails are supported:
 
 ### XRP Ledger
 
+Routes live under `/wc/v1/<slug>/` — `/bot` (standard) and `/bot/ai`
+(AI-enhanced). Solana equivalents are `/bot-solana` and `/bot-solana/ai`.
+
 ```
-POST /mcp → 402  (X402-Payment-Required, X402-Price, X402-Asset, X402-Payment-Address)
-         ↓ pay 0.1 XRP on XRPL
-POST /mcp + X-PAYMENT-SIGNATURE + X-INV-ID → 200 OK
+POST /wc/v1/thailand/bot → 402  (accepts[]: amount, asset, payTo, extra.invoiceId)
+         ↓ pay 1 XRP standard / 5 XRP AI tier on XRPL
+POST /wc/v1/thailand/bot + X-PAYMENT-SIGNATURE → 200 OK
 ```
 
-Full walkthrough: [`examples/x402_payment.py`](./examples/x402_payment.py).
+The `402` body carries the x402 challenge — read `accepts[0]` for `amount`,
+`payTo` and `extra.invoiceId`, and bind the payment to that invoice id so it
+cannot be replayed against a different query.
+
+The MCP surface reports the same requirement in-band: calling
+`xrplme_get_country_data` unpaid returns a `payment_required` result with the
+same pricing, and you resubmit with `x_payment_signature` and `x_inv_id` as
+**tool arguments** rather than HTTP headers.
+
+Full walkthrough: [`examples/demo_xrplme_paid.py`](./examples/demo_xrplme_paid.py).
 
 ### Solana USDC
 
@@ -134,8 +148,9 @@ Full walkthrough: [`examples/x402_payment_solana.py`](./examples/x402_payment_so
 | [`examples/claude_desktop_config.json`](./examples/claude_desktop_config.json) | Claude Desktop / Cursor configuration |
 | [`examples/python_client.py`](./examples/python_client.py) | Python client via the MCP SDK |
 | [`examples/node_client.js`](./examples/node_client.js) | Node.js client |
-| [`examples/x402_payment.py`](./examples/x402_payment.py) | 402 → pay XRP → retry flow |
+| [`examples/x402_payment.py`](./examples/x402_payment.py) | MCP surface: `payment_required` → pay XRP → retry with proof |
 | [`examples/x402_payment_solana.py`](./examples/x402_payment_solana.py) | 402 → pay USDC on Solana → retry flow |
+| [`examples/demo_xrplme_paid.py`](./examples/demo_xrplme_paid.py) | Full paid run on the REST surface, with on-chain TXID proof |
 
 See [`examples/README.md`](./examples/README.md) for per-example setup.
 
@@ -143,11 +158,11 @@ See [`examples/README.md`](./examples/README.md) for per-example setup.
 
 ## Data coverage
 
-30 countries across APAC, Europe and the Americas. Each country's dataset is
-refreshed daily from that country's own official government and financial
-sources, then validated before publication (a candidate dataset is only promoted
-if it meets a per-country quality threshold). `xrplme://status` reports the
-current freshness state of every country.
+90 countries across APAC, Europe, Africa, the Middle East and the Americas. Each
+country's dataset is refreshed on a regular schedule from that country's own
+official government and financial sources, then validated before publication (a
+candidate dataset is only promoted if it meets a per-country quality threshold).
+`xrplme://status` reports the current freshness state of every country.
 
 > **Freshness is explicit, never implied.** If a country's upstream source has
 > been unavailable, the server keeps serving the last validated dataset and

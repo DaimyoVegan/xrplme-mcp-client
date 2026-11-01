@@ -30,11 +30,13 @@ console.log("resources:", resources.map((r) => r.uri).join(", "), "\n");
 const status = await client.callTool({ name: "xrplme_get_country_status", arguments: {} });
 console.log("status:", status.content[0].text.slice(0, 400), "\n");
 
-// --- 3. One country's data -----------------------------------------------
+// --- 3. One country's data (PAID route) ----------------------------------
+// Without payment this returns a `payment_required` result carrying the price.
+// See demo_xrplme_paid.py for the full end-to-end paid flow.
 const data = await client.callTool({
   name: "xrplme_get_country_data",
   arguments: { slug: "thailand" },
 });
-console.log("thailand (truncated):", data.content[0].text.slice(0, 600));
+console.log("thailand (unpaid → payment_required):", data.content[0].text.slice(0, 600));
 
 await client.close();
