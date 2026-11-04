@@ -71,7 +71,7 @@ timestamped figures.
 | `xrplme://countries` | The 90 supported country slugs |
 | `xrplme://status` | Coverage status + data freshness per country |
 
-**Tools** (9, all read-only except the optional survey submit):
+**Tools** (8, all read-only except the optional survey submit):
 
 | Tool | Purpose |
 |---|---|
@@ -80,7 +80,6 @@ timestamped figures.
 | `xrplme_get_pricing` | Pricing lookup (no upstream call) |
 | `xrplme_get_country_data` | Fetch a country's latest validated records |
 | `xrplme_get_country_schema` | Record schema for a country |
-| `xrplme_regional_research` | Multi-country research over a 30-country subset *(staging prototype, feature-flagged)* |
 | `xrplme_get_survey_questions` | Retrieve the data-quality survey questions |
 | `xrplme_submit_survey` | Submit survey responses |
 | `xrplme_get_survey_stats` | Aggregate survey statistics |
