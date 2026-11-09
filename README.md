@@ -3,7 +3,7 @@
 > **Status: LIVE.** The MCP server is publicly available at
 > `https://api.xrplme.online/mcp` — anonymous, no token required for the free
 > discovery tier. Premium country routes settle per query via **x402** on the
-> XRP Ledger.
+> XRP Ledger, Solana, or Base.
 
 Example clients and integration guides for the **XRPLME Country Data** MCP server —
 90-country economic and policy data for AI agents, with a free discovery tier and
@@ -22,13 +22,13 @@ either scraping fragile HTML or reasoning from stale training data.
 XRPLME exposes that data as a **Model Context Protocol (MCP) server**, so any
 MCP-capable client (Claude Desktop, Cursor, custom agents) can query it as a
 first-class tool. Payments for premium routes use **x402** — HTTP-native,
-pay-per-query, settled on the XRP Ledger. No accounts, no API-key sales.
+pay-per-query, settled on the XRP Ledger, Solana, or Base. No accounts, no API-key sales.
 
 - **Transport:** streamable HTTP
 - **Endpoint:** `https://api.xrplme.online/mcp` *(live, anonymous)*
 - **Coverage:** 90 countries
 - **Auth:** none for the free discovery tier
-- **Premium:** x402 — 1 XRP standard / 5 XRP AI-enhanced (1 / 7 USDC on Solana)
+- **Premium:** x402 — 1 XRP standard / 5 XRP AI-enhanced (1 / 7 USDC on Solana and Base)
 
 ---
 
@@ -94,12 +94,14 @@ recent the figures you are looking at are.
 ## Paying with x402 (premium routes)
 
 Some routes return `402 Payment Required` with x402 headers. Your client pays and
-retries with proof-of-payment — no signup. Two settlement rails are supported:
+retries with proof-of-payment — no signup. Three settlement rails are supported:
+XRP Ledger, Solana, and Base.
 
 ### XRP Ledger
 
 Routes live under `/wc/v1/<slug>/` — `/bot` (standard) and `/bot/ai`
-(AI-enhanced). Solana equivalents are `/bot-solana` and `/bot-solana/ai`.
+(AI-enhanced). Solana equivalents are `/bot-solana` and `/bot-solana/ai`, Base
+equivalents are `/bot-evm` and `/bot-evm/ai`.
 
 ```
 POST /wc/v1/thailand/bot → 402  (accepts[]: amount, asset, payTo, extra.invoiceId)
@@ -133,6 +135,38 @@ transaction in a V2 payment payload via the `X-PAYMENT-SIGNATURE` header. The
 facilitator adds its fee payer signature and verifies on-chain.
 
 Full walkthrough: [`examples/x402_payment_solana.py`](./examples/x402_payment_solana.py).
+
+### Base USDC
+
+```
+POST /wc/v1/thailand/bot-evm → 402  (accepts[0]: network, asset, amount, payTo)
+         ↓ send at least `amount` USDC on Base to `payTo`
+POST /wc/v1/thailand/bot-evm + PAYMENT-SIGNATURE: {"txHash":"0x…"} → 200 OK
+```
+
+`/bot-evm` is the standard tier, `/bot-evm/ai` the AI-enhanced tier, and
+`/bot-evm/custom` the bounded multi-country tier — the same three prices as the
+XRP and Solana routes.
+
+Payment is a plain USDC transfer, verified directly against Base: the server reads
+the transaction receipt and checks the token, the recipient, the amount and the age
+of the transfer. There is no facilitator between your payment and the data, so
+nothing has to trust a third party's word that you paid.
+
+One transfer buys one call. A replayed hash returns `409`; a transfer below the
+tier price, older than one hour, on another chain, or to a different address is
+rejected with `402`. The payment header takes JSON or base64-encoded JSON:
+
+```json
+{"txHash": "0x<your Base transaction hash>"}
+```
+
+For rehearsal, `/bot-evm-test` (and `/ai`, `/custom`) settles on Base Sepolia
+(`eip155:84532`) at the same prices in test USDC. It verifies the payment and
+returns a receipt, and serves no records — country data is only released on the
+production rails.
+
+Full walkthrough: [`examples/x402_payment_base.py`](./examples/x402_payment_base.py).
 
 > The discovery tier is free and needs no payment. You only touch x402 for
 > premium country routes. Pricing is discoverable without paying via
