@@ -29,6 +29,10 @@ pay-per-query, settled on the XRP Ledger, Solana, or Base. No accounts, no API-k
 - **Coverage:** 90 countries
 - **Auth:** none for the free discovery tier
 - **Premium:** x402 — 1 XRP standard / 5 XRP AI-enhanced (1 / 7 USDC on Solana and Base)
+- **Also available over plain HTTP (not MCP tools yet):** Investigate — screening
+  `/wc/screen/bot` ($2), company look-up `/wc/entity/lookup/bot` ($1) and
+  ownership chains `/wc/entity/ownership/bot` ($5). Append `-solana` or `-evm`
+  for USDC. Machine-readable pricing: https://xrplme.online/llms.txt
 
 ---
 
