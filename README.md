@@ -26,7 +26,7 @@ pay-per-query, settled on the XRP Ledger, Solana, or Base. No accounts, no API-k
 
 - **Transport:** streamable HTTP
 - **Endpoint:** `https://api.xrplme.online/mcp` *(live, anonymous)*
-- **Coverage:** 90 countries
+- **Coverage:** 130 countries
 - **Auth:** none for the free discovery tier
 - **Premium:** x402 — 1 XRP standard / 5 XRP AI-enhanced (1 / 7 USDC on Solana and Base)
 - **Also available over plain HTTP (not MCP tools yet):** Investigate — screening
@@ -72,14 +72,14 @@ timestamped figures.
 
 | URI | Returns |
 |---|---|
-| `xrplme://countries` | The 90 supported country slugs |
+| `xrplme://countries` | The 130 supported country slugs |
 | `xrplme://status` | Coverage status + data freshness per country |
 
-**Tools** (8, all read-only except the optional survey submit):
+**Tools** (11, all read-only except the optional survey submit):
 
 | Tool | Purpose |
 |---|---|
-| `xrplme_list_countries` | Enumerate the 90 slugs, with freshness state |
+| `xrplme_list_countries` | Enumerate the 130 slugs, with freshness state |
 | `xrplme_get_country_status` | Per-country freshness + availability status |
 | `xrplme_get_pricing` | Pricing lookup (no upstream call) |
 | `xrplme_get_country_data` | Fetch a country's latest validated records |
@@ -87,6 +87,9 @@ timestamped figures.
 | `xrplme_get_survey_questions` | Retrieve the data-quality survey questions |
 | `xrplme_submit_survey` | Submit survey responses |
 | `xrplme_get_survey_stats` | Aggregate survey statistics |
+| `xrplme_screen` | Sanctions / watchlist screening of a person or business (paid) |
+| `xrplme_entity_lookup` | Company look-up: legal name, status, jurisdiction, entity ID (paid) |
+| `xrplme_entity_ownership` | Ownership tree to ultimate parent and subsidiaries (paid) |
 
 Every response carries freshness metadata: `age_hours`, `state`
 (`fresh` / `overdue` / `stale_beyond_max`), and `scraped_at`. Datasets are
@@ -195,7 +198,7 @@ See [`examples/README.md`](./examples/README.md) for per-example setup.
 
 ## Data coverage
 
-90 countries across APAC, Europe, Africa, the Middle East and the Americas. Each
+130 countries across APAC, Europe, Africa, the Middle East and the Americas. Each
 country's dataset is refreshed on a regular schedule from that country's own
 official government and financial sources, then validated before publication (a
 candidate dataset is only promoted if it meets a per-country quality threshold).
