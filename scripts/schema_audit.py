@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Schema consistency audit for all 30 country bot servers.
+Schema consistency audit for all 130 country bot servers.
 Checks that each bot's v1 response has the required top-level fields.
 Does NOT require payment — imports modules directly.
 """
