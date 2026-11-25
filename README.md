@@ -6,7 +6,7 @@
 > XRP Ledger, Solana, or Base.
 
 Example clients and integration guides for the **XRPLME Country Data** MCP server —
-90-country economic and policy data for AI agents, with a free discovery tier and
+130-country economic and policy data for AI agents, with a free discovery tier and
 x402 pay-per-query premium routes.
 
 ---
@@ -26,9 +26,10 @@ pay-per-query, settled on the XRP Ledger, Solana, or Base. No accounts, no API-k
 
 - **Transport:** streamable HTTP
 - **Endpoint:** `https://api.xrplme.online/mcp` *(live, anonymous)*
-- **Coverage:** 130 countries
+- **Coverage:** 130 countries, plus deep verified records for 13 of them
 - **Auth:** none for the free discovery tier
-- **Premium:** x402 — 1 XRP standard / 5 XRP AI-enhanced (1 / 7 USDC on Solana and Base)
+- **Premium:** x402 — 1 XRP standard / 5 XRP AI-enhanced (1 / 7 USDC on Solana and Base); deep 2 XRP / $2.00
+- **Agent intent registry:** post free, $1 paid-to-query, $19/month Pro
 - **Also available over plain HTTP (not MCP tools yet):** Investigate — screening
   `/wc/screen/bot` ($2), company look-up `/wc/entity/lookup/bot` ($1) and
   ownership chains `/wc/entity/ownership/bot` ($5). Append `-solana` or `-evm`
